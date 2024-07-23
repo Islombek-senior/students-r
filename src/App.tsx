@@ -1,25 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { StudentsPage } from "./pages/students";
+import { ClassesPage } from "./pages/students/classes";
+import React, { useState } from "react";
+import { PageType } from "./types";
+import { SubjectComponent } from "./pages/students/subjects";
+import { Teachers } from "./pages/students/teachers";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "light",
+  },
+});
+
+export const AppContext = React.createContext({
+  activePage: "classes" as PageType,
+  setAvtivePage: (page: PageType) => {},
+});
 
 function App() {
+  const [activePage, setAvtivePage] = useState<PageType>("classes");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContext.Provider value={{ activePage, setAvtivePage }}>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        {activePage === "students" && <StudentsPage />}
+        {activePage === "classes" && <ClassesPage />}
+        {activePage === "subjects" && <SubjectComponent />}
+        {activePage === "teachers" && <Teachers />}
+      </ThemeProvider>
+    </AppContext.Provider>
   );
 }
 
